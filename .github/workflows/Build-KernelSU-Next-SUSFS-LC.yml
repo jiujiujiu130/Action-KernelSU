@@ -1,28 +1,41 @@
-name: Build KernelSU Next SUSFS LC
+name: Build OnePlus12 KernelSU Next
 on:
   workflow_dispatch:
     inputs:
       CPU:
         description: "分支"
         required: true
-        default: 'sm8475'
+        default: 'sm8650'
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ace2_v'
+        default: 'oneplus12_v'
       CPUD:
         description: "处理器代号"
         required: true
-        default: 'waipio'
+        default: 'pineapple'
       ANDROID_VERSION:
         description: "内核安卓版本"
         required: true
-        default: 'android12'
+        default: 'android14'
       KERNEL_VERSION:
         description: "内核版本"
         required: true
-        default: '5.10'
-
+        default: '6.1'
+      KSUNEXT_ENABLED:
+        description: "添加 KSU Next"
+        required: true
+        type: boolean
+        default: true
+      SUSFS_ENABLED:
+        description: "添加 SUSFS"
+        required: true
+        type: boolean
+        default: true
+      SUSFS_VERSION:
+        description: "SUSFS 版本"
+        required: true
+        default: 'v1.5.5'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,7 +46,6 @@ jobs:
         with:
           root-reserve-mb: 8192
           temp-reserve-mb: 2048
-          swap-size-mb: 8192
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
@@ -58,7 +70,7 @@ jobs:
       - name: Initialize repo and sync
         run: |
          mkdir kernel_workspace && cd kernel_workspace
-         repo init -u https://github.com/MClengchuan/oneplus_kernel_manifest.git -b oneplus/${{ github.event.inputs.CPU }} -m ${{ github.event.inputs.FEIL }}.xml --depth=1
+         repo init -u https://github.com/MClengchuan/oneplus_kernel_manifest.git -b refs/heads/oneplus/${{ github.event.inputs.CPU }} -m ${{ github.event.inputs.FEIL }}.xml --depth=1
          repo sync
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
@@ -66,15 +78,17 @@ jobs:
          sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
 
       - name: Set up KernelSU Next
+        if: github.event.inputs.KSUNEXT_ENABLED == 'true'
         run: |
          cd kernel_workspace/kernel_platform
          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next
          cd KernelSU-Next
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
-         sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
+         sed -i "s/DKSU_VERSION=11998/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
         
       - name: Set up susfs
+        if: github.event.inputs.SUSFS_ENABLED == 'true'
         run: |
            cd kernel_workspace
            git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}
@@ -85,7 +99,7 @@ jobs:
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
-            # Apply patches
+           # Apply patches
            cd ./KernelSU-Next
            # patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
            cp ../../kernel_patches/KernelSU-Next-Implement-SUSFS-${{ github.event.inputs.SUSFS_VERSION }}-Universal.patch ./
@@ -112,12 +126,7 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace
-         ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} perf
-
-      - name: Find Image
-        run: |
-         cd kernel_workspace
-         find -name Image
+         ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} gki
          
       - name: Make AnyKernel3
         run: |
