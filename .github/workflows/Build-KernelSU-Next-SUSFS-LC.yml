@@ -106,7 +106,7 @@ jobs:
            # Apply patches
            cd ./KernelSU-Next
            # patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
-           cp ../../kernel_patches/next/0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5-Universal.patch ./
+           cp ../../kernel_patches/next/0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5.patch ./
            patch -p1 < KernelSU-Next-Implement-SUSFS-${{ github.event.inputs.SUSFS_VERSION }}-Universal.patch || true
            
            cd ../common
