@@ -110,6 +110,8 @@ jobs:
            cp ../../kernel_patches/next/0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5.patch ./
            patch -p1 < 0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5.patch || true
 
+           cd ../common
+           patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
            cp ../../kernel_patches/next/next_hooks.patch ./
            patch -p1 -F 3 < next_hooks.patch
 
@@ -127,8 +129,7 @@ jobs:
            extern bool ksu_execveat_hook;\
            extern bool ksu_input_hook;' kernel/ksud.h || true
            
-           cd ../common
-           patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
+           cd common
            cp ../../kernel_patches/69_hide_stuff.patch ./
            patch -p1 -F 3 < 69_hide_stuff.patch
            git add -A && git commit -a -m "BUILD Kernel"
