@@ -5,11 +5,11 @@ on:
       CPU:
         description: "分支"
         required: true
-        default: 'sm7675'
+        default: 'sm8650'
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ace_3v_v'
+        default: 'oneplus12_v'
       CPUD:
         description: "处理器代号"
         required: true
@@ -58,7 +58,7 @@ jobs:
       - name: Configure Git
         run: |
          git config --global user.name "build"
-         git config --global user.email "3436378798@qq.com"
+         git config --global user.email "123456789@qq.com"
 
       - name: Install dependencies
         run: |
@@ -80,6 +80,7 @@ jobs:
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
          sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
          sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
+         sed -i '$s|echo "\$res"|echo "\$res-jiujiu"|' kernel_platform/common/scripts/setlocalversion
 
       - name: Set up KernelSU Next
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
@@ -89,7 +90,7 @@ jobs:
          cd KernelSU-Next
          KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
-         sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
+         sed -i "s/DKSU_VERSION=11998/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
         
       - name: Set up susfs
         if: github.event.inputs.SUSFS_ENABLED == 'true'
@@ -106,10 +107,14 @@ jobs:
            # Apply patches
            cd ./KernelSU-Next
            # patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
-           cp ../../kernel_patches/KernelSU-Next-Implement-SUSFS-${{ github.event.inputs.SUSFS_VERSION }}-Universal.patch ./
-           patch -p1 < KernelSU-Next-Implement-SUSFS-${{ github.event.inputs.SUSFS_VERSION }}-Universal.patch || true
+           cp ../../kernel_patches/next/0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5.patch ./
+           patch -p1 < 0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5.patch || true
            
            cd ../common
+
+           cp ../../kernel_patches/next/next_hooks.patch ./
+           patch -p1 -F 3 < next_hooks.patch
+           
            patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
            cp ../../kernel_patches/69_hide_stuff.patch ./
            patch -p1 -F 3 < 69_hide_stuff.patch
