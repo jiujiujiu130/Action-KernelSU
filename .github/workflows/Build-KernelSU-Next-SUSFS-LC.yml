@@ -55,6 +55,11 @@ jobs:
           remove-haskell: 'true'
           remove-codeql: 'true'
 
+      - name: Configure Git
+        run: |
+         git config --global user.name "build"
+         git config --global user.email "1074504347@qq.com"
+
       - name: Install dependencies
         run: |
          sudo apt update && sudo apt upgrade -y
