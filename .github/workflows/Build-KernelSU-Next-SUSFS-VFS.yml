@@ -78,8 +78,8 @@ jobs:
          repo sync
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-         sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
-         sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
+         #sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
+         #sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
 
       - name: Set up KernelSU Next
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
@@ -167,10 +167,11 @@ jobs:
          echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
          sed -i 's/check_defconfig//' ./common/build.config.gki
-         sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
-         #sed -i '$s|echo "\$res"|echo "\$res-XQM"|' ./common/scripts/setlocalversion
-         sed -E -i '/^CONFIG_LOCALVERSION=/ s/(.*)"$/\1-XQM"/' ./common/arch/arm64/configs/gki_defconfig
-           
+         sed -i 's/-dirty//g' kernel_platform/common/scripts/setlocalversion
+         sed -i 's/-dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
+         sed -i '$s|echo "\$res"|echo "\$res-XQM"|' ./common/scripts/setlocalversion
+         
+         
       - name: Build kernel
         run: |
          cd kernel_workspace
