@@ -78,8 +78,8 @@ jobs:
          repo sync
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-         sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
-         sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
+         sed -i 's/-dirty//g' kernel_platform/common/scripts/setlocalversion
+         sed -i 's/-dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
          sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
 
       - name: Set up KernelSU Next
@@ -170,8 +170,10 @@ jobs:
          sed -i 's/check_defconfig//' ./common/build.config.gki
          #sed -i 's/CONFIG_LOCALVERSION=".*"//' ./common/arch/arm64/configs/gki_defconfig
          #sed -i 's/CONFIG_LOCALVERSION_AUTO=y/CONFIG_LOCALVERSION_AUTO=n/' ./common/arch/arm64/configs/gki_defconfig
-         sudo find / -iname "LOCALSION" -exec rm -rv {} \;
-         
+         #sudo find / -iname "LOCALSION" -exec rm -rv {} \;
+         sed -i "/-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
+         sed -E -i '/^CONFIG_LOCALVERSION=/ s/(.*)"$/\1-Wild+"/' ./common/arch/arm64/configs/gki_defconfig
+
       - name: Build kernel
         run: |
          cd kernel_workspace
