@@ -171,8 +171,10 @@ jobs:
          #sed -i 's/CONFIG_LOCALVERSION=".*"//' ./common/arch/arm64/configs/gki_defconfig
          #sed -i 's/CONFIG_LOCALVERSION_AUTO=y/CONFIG_LOCALVERSION_AUTO=n/' ./common/arch/arm64/configs/gki_defconfig
          #sudo find / -iname "LOCALSION" -exec rm -rv {} \;
-         sed -i "s/-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
-         sed -E -i '/^CONFIG_LOCALVERSION=/ s|(.*)"$|\1-Wild+"|' ./common/arch/arm64/configs/gki_defconfig
+         #sed -i "s/-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
+         #sed -E -i '/^CONFIG_LOCALVERSION=/ s|(.*)"$|\1-Wild+"|' ./common/arch/arm64/configs/gki_defconfig
+         cd ..
+         touch .scmversion
 
       - name: Build kernel
         run: |
