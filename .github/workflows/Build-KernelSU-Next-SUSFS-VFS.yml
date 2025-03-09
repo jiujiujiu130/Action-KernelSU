@@ -79,11 +79,13 @@ jobs:
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
          echo "内核"
-         find . -type f -iname ".config"
+         find . -type f -iname "*.config"
          echo "文件"
-         find . -type f -iname ".scmversion"
+         find . -type f -iname "*.scmversion"
          echo "内核后缀追加"
-         find . -type f -iname "localversion"
+         find . -type f -iname "localversion*"
+         echo "内核文件"
+         find . -type f -iname "gki_defconfig"
          sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
          #sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
          
