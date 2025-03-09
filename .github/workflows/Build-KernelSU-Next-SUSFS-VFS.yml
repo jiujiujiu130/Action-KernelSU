@@ -78,17 +78,15 @@ jobs:
          repo sync
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-         find . -type f  # 列出当前目录及其子目录中所有文件的完整路径
+         echo "内核"
+         find . -type f -iname ".config"
+         echo "文件"
+         find . -type f -iname ".scmversion"
+         echo "内核后缀追加"
+         find . -type f -iname "localversion"
          sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
          #sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
-
-      - name: Set LTO to THIN
-        run: |
-         cd kernel_workspace/kernel_platform
-         sed -i 's/CONFIG_LTO=n/CONFIG_LTO=y/' ./common/arch/arm64/configs/gki_defconfig
-         sed -i 's/CONFIG_LTO_CLANG_FULL=y/CONFIG_LTO_CLANG_THIN=y/' ./common/arch/arm64/configs/gki_defconfig
-         sed -i 's/CONFIG_LTO_CLANG_NONE=y/CONFIG_LTO_CLANG_THIN=y/' ./common/arch/arm64/configs/gki_defconfig
-
+         
       - name: Set up KernelSU Next
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
         run: |
@@ -182,12 +180,11 @@ jobs:
          #sed -E -i '/^CONFIG_LOCALVERSION=/ s|(.*)"$|\1-Wild+"|' ./common/arch/arm64/configs/gki_defconfig
          #echo "CONFIG_LOCALVERSION_AUTO=n" >> ./common/arch/arm64/configs/gki_defconfig
          #sed -i 's/CONFIG_LOCALVERSION=".*"/CONFIG_LOCALVERSION="jiujiu"/' ./common/arch/arm64/configs/gki_defconfig
-         find .. -type f  # 列出当前目录及其子目录中所有文件的完整路径
 
       - name: Build kernel
         run: |
          cd kernel_workspace
-         #export LTO=thin
+         export LTO=thin
          ./kernel_platform/build_with_bazel.py -t ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.BUILD_METHOD }}
          #./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.BUILD_METHOD }}
          
