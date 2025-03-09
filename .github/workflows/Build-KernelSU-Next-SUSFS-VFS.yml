@@ -78,11 +78,10 @@ jobs:
          repo sync
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-         cat kernel_platform/common/scripts/setlocalversion
-         sed -i 's/-dirty//g' kernel_platform/common/scripts/setlocalversion
-         sed -i 's/-dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
+         touch .scmversion
+         sed -i 's/ -dirty//' kernel_platform/common/scripts/setlocalversion
+         sed -i 's/ -dirty//' kernel_platform/msm-kernel/scripts/setlocalversion
          sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
-         echo "查看"
 
       - name: Set up KernelSU Next
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
@@ -175,8 +174,8 @@ jobs:
          #sudo find / -iname "LOCALSION" -exec rm -rv {} \;
          #sed -i "s/-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
          #sed -E -i '/^CONFIG_LOCALVERSION=/ s|(.*)"$|\1-Wild+"|' ./common/arch/arm64/configs/gki_defconfig
-         echo "CONFIG_LOCALVERSION_AUTO=n" >> ./common/arch/arm64/configs/gki_defconfig
-         sed -i 's/CONFIG_LOCALVERSION=".*"/CONFIG_LOCALVERSION="jiujiu"/' ./common/arch/arm64/configs/gki_defconfig
+         #echo "CONFIG_LOCALVERSION_AUTO=n" >> ./common/arch/arm64/configs/gki_defconfig
+         #sed -i 's/CONFIG_LOCALVERSION=".*"/CONFIG_LOCALVERSION="jiujiu"/' ./common/arch/arm64/configs/gki_defconfig
 
       - name: Build kernel
         run: |
