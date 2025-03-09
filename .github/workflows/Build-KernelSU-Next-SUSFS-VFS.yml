@@ -78,10 +78,12 @@ jobs:
          repo sync
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-         touch .scmversion
+         cat kernel_platform/common/arch/arm64/configs/gki_defconfig
          sed -i 's/ -dirty//' kernel_platform/common/scripts/setlocalversion
          sed -i 's/ -dirty//' kernel_platform/msm-kernel/scripts/setlocalversion
          sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
+         echo "set"
+         cat kernel_platform/common/scripts/setlocalversion
 
       - name: Set up KernelSU Next
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
@@ -168,7 +170,7 @@ jobs:
          echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./common/arch/arm64/configs/gki_defconfig
          echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
-         sed -i 's/check_defconfig//' ./common/build.config.gki
+         sed -i '2s/check_defconfig//' ./common/build.config.gki
          #sed -i 's/CONFIG_LOCALVERSION=".*"//' ./common/arch/arm64/configs/gki_defconfig
          #sed -i 's/CONFIG_LOCALVERSION_AUTO=y/CONFIG_LOCALVERSION_AUTO=n/' ./common/arch/arm64/configs/gki_defconfig
          #sudo find / -iname "LOCALSION" -exec rm -rv {} \;
