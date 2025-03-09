@@ -78,17 +78,9 @@ jobs:
          repo sync
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-         echo "内核"
-         find .. -type f -iname "localversion*"
-         echo "文件"
-         cat kernel_platform/build/kernel/kleaf/workspace_status_dir/include/config/auto.conf
-         echo "内核后缀追加"
-         cat kernel_platform/common/Makefile
-         echo "内核文件"
-         cat kernel_platform/build/kernel/kleaf/tests/merged_kernel_uapi_headers_test/Makefile
-         sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
+         #sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
          sed -i 's/ -dirty//g' kernel_platform/msm-kernel/scripts/setlocalversion
-         #sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
+         sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/msm-kernel/scripts/setlocalversion
          
       - name: Set up KernelSU Next
         if: github.event.inputs.KSUNEXT_ENABLED == 'true'
@@ -176,13 +168,6 @@ jobs:
          echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
          sed -i '2s/check_defconfig//' ./common/build.config.gki
-         #sed -i 's/CONFIG_LOCALVERSION=".*"//' ./common/arch/arm64/configs/gki_defconfig
-         #sed -i 's/CONFIG_LOCALVERSION_AUTO=y/CONFIG_LOCALVERSION_AUTO=n/' ./common/arch/arm64/configs/gki_defconfig
-         #sudo find / -iname "LOCALSION" -exec rm -rv {} \;
-         sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
-         #sed -E -i '/^CONFIG_LOCALVERSION=/ s|(.*)"$|\1-Wild+"|' ./common/arch/arm64/configs/gki_defconfig
-         #echo "CONFIG_LOCALVERSION_AUTO=n" >> ./common/arch/arm64/configs/gki_defconfig
-         #sed -i 's/CONFIG_LOCALVERSION=".*"/CONFIG_LOCALVERSION="jiujiu"/' ./common/arch/arm64/configs/gki_defconfig
 
       - name: Build kernel
         run: |
