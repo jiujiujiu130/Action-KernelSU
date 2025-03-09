@@ -83,7 +83,7 @@ jobs:
          echo "文件"
          cat kernel_platform/build/kernel/kleaf/workspace_status_dir/include/config/auto.conf
          echo "内核后缀追加"
-         kernel_platform/common/Makefile
+         cat kernel_platform/common/Makefile
          echo "内核文件"
          cat kernel_platform/build/kernel/kleaf/tests/merged_kernel_uapi_headers_test/Makefile
          sed -i 's/ -dirty//g' kernel_platform/common/scripts/setlocalversion
