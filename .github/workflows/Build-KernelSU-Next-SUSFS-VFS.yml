@@ -85,7 +85,7 @@ jobs:
          #FEIL_INPUT=${{ github.event.inputs.FEIL }} && FEIL_INPUT=${FEIL_INPUT%??}
          #sed -i '$s|echo "\$res"|echo "-${FEIL_INPUT}-XQM"|' kernel_platform/common/scripts/setlocalversion
          
-         sed -i "\$ {/echo \"\$res\"/i res=\$(echo \"\$res\" | sed 's/-dirty//g')}" kernel_platform/common/scripts/setlocalversion
+         sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' kernel_platform/common/scripts/setlocalversion
          sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
 
       - name: Set up KernelSU Next
