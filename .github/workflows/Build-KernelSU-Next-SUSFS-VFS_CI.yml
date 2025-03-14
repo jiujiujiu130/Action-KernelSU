@@ -25,7 +25,7 @@ on:
       BUILD_METHOD:
         description: "编译方式"
         required: true
-        default: 'gki'
+        default: 'perf'
       KSUNEXT_ENABLED:
         description: "添加 KSU Next"
         required: true
@@ -154,11 +154,11 @@ jobs:
         run: |
          cd kernel_workspace
          #export LTO=thin
-         if [ -f "./kernel_platform/build_with_bazel.py" ]; then
-            ./kernel_platform/build_with_bazel.py -t ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.BUILD_METHOD }}
-         else
+         #if [ -f "./kernel_platform/build_with_bazel.py" ]; then
+            #./kernel_platform/build_with_bazel.py -t ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.BUILD_METHOD }}
+         #else
             ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.BUILD_METHOD }}
-         fi
+         #fi
          
       - name: Make AnyKernel3
         run: |
