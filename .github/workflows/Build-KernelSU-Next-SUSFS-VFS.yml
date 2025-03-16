@@ -1,4 +1,4 @@
-name: Build KernelSU Next ${{ github.event.inputs.FEIL }} VFS
+name: Build KernelSU Next VFS
 on:
   workflow_dispatch:
     inputs:
