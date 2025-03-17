@@ -142,7 +142,6 @@ jobs:
          echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./common/arch/arm64/configs/gki_defconfig
          echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
          sed -i '2s/check_defconfig//' ./common/build.config.gki
-
          
       - name: Build kernel
         run: |
@@ -153,12 +152,18 @@ jobs:
          else
             ./kernel_platform/oplus/build/oplus_build_kernel.sh ${{ github.event.inputs.CPUD }} ${{ github.event.inputs.BUILD_METHOD }}
          fi
-         
+
       - name: Make AnyKernel3
         run: |
          git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1
          rm -rf ./AnyKernel3/.git
          cp kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
+
+      - name: Download Latest SUSFS Module from Release
+        if: ${{ github.event.inputs.FEIL != 'oneplus_pad2_v' }} 
+        run: |
+          wget https://github.com/jiujiujiu130/Action-KernelSU/raw/refs/heads/main/SUSFS_Module/SUSFS-FOR-KERNELSU.zip
+          cp SUSFS-FOR-KERNELSU.zip ./AnyKernel3/
 
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
