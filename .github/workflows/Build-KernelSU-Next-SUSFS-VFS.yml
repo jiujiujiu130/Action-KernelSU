@@ -159,7 +159,7 @@ jobs:
          rm -rf ./AnyKernel3/.git
          cp kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
 
-      - name: Download Latest SUSFS Module from Release
+      - name: Download SUSFS Module
         if: ${{ github.event.inputs.FEIL != 'oneplus_pad2_v' }} 
         run: |
           wget https://github.com/jiujiujiu130/Action-KernelSU/raw/refs/heads/main/SUSFS_Module/SUSFS-FOR-KERNELSU.zip
