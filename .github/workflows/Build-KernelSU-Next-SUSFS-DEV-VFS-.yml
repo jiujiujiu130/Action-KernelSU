@@ -26,20 +26,11 @@ on:
         description: "编译方式"
         required: true
         default: 'gki'
-      KSUNEXT_ENABLED:
-        description: "添加 KSU Next"
-        required: true
-        type: boolean
-        default: true
       SUSFS_ENABLED:
         description: "添加 SUSFS"
         required: true
         type: boolean
         default: true
-      SUSFS_VERSION:
-        description: "SUSFS 版本"
-        required: true
-        default: 'v1.5.5'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -89,7 +80,6 @@ jobs:
          sed -i '$s|echo "\$res"|echo "\$res-XQM"|' kernel_platform/common/scripts/setlocalversion
 
       - name: Set up KernelSU Next
-        if: github.event.inputs.KSUNEXT_ENABLED == 'true'
         run: |
          cd kernel_workspace/kernel_platform
          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next-susfs/kernel/setup.sh" | bash -s next-susfs-dev
