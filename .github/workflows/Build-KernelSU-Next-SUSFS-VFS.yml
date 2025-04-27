@@ -31,11 +31,6 @@ on:
         required: true
         type: boolean
         default: true
-      SUSFS_MODULE:
-        description: "下载 SUSFS 模块"
-        required: true
-        type: boolean
-        default: false
       SUSFS_VERSION:
         description: "SUSFS 版本"
         required: true
@@ -163,12 +158,6 @@ jobs:
          git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1
          rm -rf ./AnyKernel3/.git
          cp kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/dist/Image ./AnyKernel3/
-
-      - name: Download SUSFS Module
-        if: github.event.inputs.SUSFS_MODULE == 'true'
-        run: |
-          wget https://github.com/jiujiujiu130/Action-KernelSU/raw/refs/heads/main/SUSFS_Module/SUSFS-FOR-KERNELSU.zip
-          cp SUSFS-FOR-KERNELSU.zip ./AnyKernel3/
 
       - name: Upload AnyKernel3
         uses: actions/upload-artifact@v4
