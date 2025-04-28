@@ -31,10 +31,6 @@ on:
         required: true
         type: boolean
         default: true
-      SUSFS_VERSION:
-        description: "SUSFS 版本"
-        required: true
-        default: 'v1.5.5'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -105,8 +101,8 @@ jobs:
 
            # Apply patches
            cd ./KernelSU-Next
-           cp ../../kernel_patches/next/0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5.patch ./
-           patch -p1 < 0001-kernel-patch-susfs-${{ github.event.inputs.SUSFS_VERSION }}-to-KernelSU-Next-v1.0.5.patch || true
+           cp ../../kernel_patches/next/kernel-implement-susfs-v1.5.7-gki.patch ./
+           patch -p1 < kernel-implement-susfs-v1.5.7-gki.patch || true
 
            cd ../common
            patch -p1 < 50_add_susfs_in_gki-${{ github.event.inputs.ANDROID_VERSION }}-${{ github.event.inputs.KERNEL_VERSION }}.patch || true
