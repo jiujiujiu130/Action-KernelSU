@@ -101,7 +101,7 @@ jobs:
 
            # Apply patches
            cd ./KernelSU-Next
-           cp ../../kernel-patch-susfs-v1.5.7-to-KernelSU-Next.patch ./
+           cp ../../kernel_patches/next/kernel-patch-susfs-v1.5.7-to-KernelSU-Next.patch ./
            patch -p1 < kernel-patch-susfs-v1.5.7-to-KernelSU-Next.patch || true
 
            cd ../common
