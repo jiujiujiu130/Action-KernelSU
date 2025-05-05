@@ -112,8 +112,8 @@ jobs:
            cp ../../kernel_patches/69_hide_stuff.patch ./
            patch -p1 -F 3 < 69_hide_stuff.patch
 
-           cp ../../kernel_patches/next/manager.patch ./
-           patch -p1 -F 3 < manager.patch
+           #cp ../../kernel_patches/next/manager.patch ./
+           #patch -p1 < manager.patch || true
            
            git add -A && git commit -a -m "BUILD Kernel"
            cd ..
