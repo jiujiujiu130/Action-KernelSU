@@ -169,7 +169,7 @@ jobs:
           sed -i 's/ -dirty//g' msm-kernel/scripts/setlocalversion
           sed -i 's/ -dirty//g' external/dtc/scripts/setlocalversion
           sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' common/scripts/setlocalversion
-          #sed -i '$s|echo "\$res"|echo "\$res-XQM"|' common/scripts/setlocalversion
+          sed -i '$s|echo "\$res"|echo "\$res-XQM"|' common/scripts/setlocalversion
           git add -A
           git commit -m "Force remove -dirty suffix from kernel version"
 
@@ -232,6 +232,7 @@ jobs:
             echo "正在打lz4kd补丁"
             patch -p1 -F 3 < lz4kd.patch || true
             echo '完成LZ4KD补丁'
+          fi
 
       # 配置信息
       - name: Add Configuration Settings
