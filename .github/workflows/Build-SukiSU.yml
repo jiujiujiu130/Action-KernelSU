@@ -230,7 +230,7 @@ jobs:
           if [ "${{ github.event.inputs.ZRAM }}" = "true" ]; then
             cp ../../SukiSU_patch/other/zram/zram_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
             echo "正在打lz4kd补丁"
-            patch -p1 -F 3 < lz4kd.patch
+            patch -p1 -F 3 < lz4kd.patch || true
             echo '完成LZ4KD补丁'
 
       # 配置信息
