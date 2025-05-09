@@ -283,12 +283,12 @@ jobs:
           if [ "${{ github.event.inputs.ZRAM }}" = "true" ]; then
             CONFIG_FILE=./common/arch/arm64/configs/gki_defconfig
 
-            #if grep -q "CONFIG_ZSMALLOC" -- "$CONFIG_FILE"; then
-              #sed -i 's/CONFIG_ZSMALLOC=m/CONFIG_ZSMALLOC=y/g' "$CONFIG_FILE"
-            #else
+            if grep -q "CONFIG_ZSMALLOC" -- "$CONFIG_FILE"; then
+              sed -i 's/CONFIG_ZSMALLOC=m/CONFIG_ZSMALLOC=y/g' "$CONFIG_FILE"
+            else
               echo "CONFIG_ZSMALLOC=y" >> "$CONFIG_FILE"
-            #fi
-            #sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' "$CONFIG_FILE"
+            fi
+            sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' "$CONFIG_FILE"
             #echo "CONFIG_MODULE_SIG_FORCE=n" >> "$CONFIG_FILE"
 
             #if grep -q "CONFIG_ZSMALLOC=y" "$CONFIG_FILE" && grep -q "CONFIG_ZRAM=y" "$CONFIG_FILE"; then
