@@ -170,6 +170,7 @@ jobs:
           sed -i 's/ -dirty//g' msm-kernel/scripts/setlocalversion
           sed -i 's/ -dirty//g' external/dtc/scripts/setlocalversion
           sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' common/scripts/setlocalversion
+          sed -i '$s|echo "\$res"|echo "\$res-xqm"|' kernel_platform/common/scripts/setlocalversion
           git add -A
           git commit -m "Force remove -dirty suffix from kernel version"
 
@@ -289,7 +290,7 @@ jobs:
               echo "CONFIG_ZSMALLOC=y" >> "$CONFIG_FILE"
             fi
             #sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' "$CONFIG_FILE"
-            #echo "CONFIG_MODULE_SIG_FORCE=n" >> "$CONFIG_FILE"
+            echo "CONFIG_MODULE_SIG_FORCE=n" >> "$CONFIG_FILE"
 
             #if grep -q "CONFIG_ZSMALLOC=y" "$CONFIG_FILE" && grep -q "CONFIG_ZRAM=y" "$CONFIG_FILE"; then
               echo "CONFIG_CRYPTO_LZ4HC=y" >> "$CONFIG_FILE"
