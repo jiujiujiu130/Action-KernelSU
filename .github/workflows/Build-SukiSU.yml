@@ -288,7 +288,7 @@ jobs:
             else
               echo "CONFIG_ZSMALLOC=y" >> "$CONFIG_FILE"
             fi
-            sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' "$CONFIG_FILE"
+            #sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' "$CONFIG_FILE"
             #echo "CONFIG_MODULE_SIG_FORCE=n" >> "$CONFIG_FILE"
 
             #if grep -q "CONFIG_ZSMALLOC=y" "$CONFIG_FILE" && grep -q "CONFIG_ZRAM=y" "$CONFIG_FILE"; then
