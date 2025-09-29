@@ -102,11 +102,6 @@ on:
         description: "是否启用KPM？"
         required: true
         default: false
-      ZRAM:
-        type: boolean
-        description: "是否启用添加更多的ZRAM算法？"
-        required: true
-        default: false
 
 jobs:
   build:
@@ -233,16 +228,6 @@ jobs:
           echo "vfs_patch完成"
           fi
 
-      - name: Apply LZ4KD
-        run: |
-          cd kernel_workspace/kernel_platform/common
-          if [ "${{ github.event.inputs.ZRAM }}" = "true" ]; then
-            cp ../../SukiSU_patch/other/zram/zram_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
-            echo "正在打lz4kd补丁"
-            patch -p1 -F 3 < lz4kd.patch || true
-            echo '完成LZ4KD补丁'
-          fi
-
       # 配置信息
       - name: Add Configuration Settings
         run: |
@@ -287,27 +272,6 @@ jobs:
 
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
-
-          # LZ4KD配置
-          if [ "${{ github.event.inputs.ZRAM }}" = "true" ]; then
-            CONFIG_FILE=./common/arch/arm64/configs/gki_defconfig
-
-            if grep -q "CONFIG_ZSMALLOC" -- "$CONFIG_FILE"; then
-              sed -i 's/CONFIG_ZSMALLOC=m/CONFIG_ZSMALLOC=y/g' "$CONFIG_FILE"
-            else
-              echo "CONFIG_ZSMALLOC=y" >> "$CONFIG_FILE"
-            fi
-            #sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' "$CONFIG_FILE"
-            echo "CONFIG_MODULE_SIG_FORCE=n" >> "$CONFIG_FILE"
-
-            #if grep -q "CONFIG_ZSMALLOC=y" "$CONFIG_FILE" && grep -q "CONFIG_ZRAM=y" "$CONFIG_FILE"; then
-              echo "CONFIG_CRYPTO_LZ4HC=y" >> "$CONFIG_FILE"
-              echo "CONFIG_CRYPTO_LZ4K=y" >> "$CONFIG_FILE"
-              echo "CONFIG_CRYPTO_LZ4KD=y" >> "$CONFIG_FILE"
-              echo "CONFIG_CRYPTO_842=y" >> "$CONFIG_FILE"
-              echo "CONFIG_ZRAM_WRITEBACK=y" >> "$CONFIG_FILE"
-            #fi
-          fi
 
       - name: Build kernel
         if: ${{ github.event.inputs.CPU == 'sm8650' || github.event.inputs.CPU == 'sm7675' }}
