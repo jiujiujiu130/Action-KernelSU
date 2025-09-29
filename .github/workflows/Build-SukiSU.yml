@@ -94,12 +94,12 @@ on:
         default: true
       suffix:
         type: boolean
-        description: "是否启用KPM？"
+        description: "是否添加内核版本名后缀？"
         required: true
         default: true
       KPM:
         type: boolean
-        description: "是否添加后缀？"
+        description: "是否启用KPM？"
         required: true
         default: false
       ZRAM:
