@@ -92,7 +92,7 @@ on:
         description: "是否启用手动钩子？"
         required: true
         default: true
-      suffix:
+      coresuffix:
         type: boolean
         description: "是否添加内核版本名后缀？"
         required: true
@@ -176,7 +176,7 @@ jobs:
           sed -i 's/ -dirty//g' external/dtc/scripts/setlocalversion
           sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' common/scripts/setlocalversion
           
-          if [ "${{ github.event.inputs.suffix }}" = "true" ]; then
+          if [ "${{ github.event.inputs.coresuffix }}" = "true" ]; then
             sed -i '$s|echo "\$res"|echo "\$res-xqm"|' common/scripts/setlocalversion
           fi
           git add -A
