@@ -83,6 +83,10 @@ on:
         options:
           - gki
           - perf
+      SUSFS_VERSION:
+        description: "susfs版本"
+        required: true
+        default: 'main'
       SUSFS_CI:
         type: boolean
         description: "下载SUSFS模块是否使用CI构建？"
@@ -98,10 +102,6 @@ on:
         description: "内核名称是否添加后缀？"
         required: true
         default: true
-      SUSFS_VERSION:
-        description: "susfs版本"
-        required: true
-        default: 'main'
 
 jobs:
   build:
