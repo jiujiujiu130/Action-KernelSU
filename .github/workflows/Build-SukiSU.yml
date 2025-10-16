@@ -83,10 +83,6 @@ on:
         options:
           - gki
           - perf
-      SUSFS_VERSION:
-        description: "susfs版本"
-        required: true
-        default: main
       SUSFS_CI:
         type: boolean
         description: "下载SUSFS模块是否使用CI构建？"
@@ -180,7 +176,7 @@ jobs:
       - name: Add KernelSU-SukiSU Ultra
         run: |
           cd kernel_workspace/kernel_platform
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-${{ github.event.inputs.SUSFS_VERSION }}
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
           #cd ./KernelSU
           #KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10606)
           #echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
