@@ -170,7 +170,7 @@ jobs:
           sed -i 's/ -dirty//g' msm-kernel/scripts/setlocalversion
           sed -i 's/ -dirty//g' external/dtc/scripts/setlocalversion
           sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' common/scripts/setlocalversion
-          if [ "${{ github.event.inputs.SUFFIX }}" = "false" ]; then
+          if [ "${{ github.event.inputs.SUFFIX }}" = "true" ]; then
             sed -i '$s|echo "\$res"|echo "\$res-xqm"|' common/scripts/setlocalversion
           fi
           git add -A
