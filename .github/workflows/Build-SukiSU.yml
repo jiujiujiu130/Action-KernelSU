@@ -93,11 +93,11 @@ on:
         description: "是否启用手动钩子？"
         required: true
         default: true
-      KPM:
+      suffix:
         type: boolean
-        description: "是否启用KPM？"
+        description: "是否添加后缀？"
         required: true
-        default: false
+        default: true
       ZRAM:
         type: boolean
         description: "是否启用添加更多的ZRAM算法？"
@@ -171,7 +171,9 @@ jobs:
           sed -i 's/ -dirty//g' msm-kernel/scripts/setlocalversion
           sed -i 's/ -dirty//g' external/dtc/scripts/setlocalversion
           sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' common/scripts/setlocalversion
-          sed -i '$s|echo "\$res"|echo "\$res-xqm"|' common/scripts/setlocalversion
+          if [ "${{ github.event.inputs.suffix }}" = "false" ]; then
+            sed -i '$s|echo "\$res"|echo "\$res-xqm"|' common/scripts/setlocalversion
+          fi
           git add -A
           git commit -m "Force remove -dirty suffix from kernel version"
 
@@ -371,17 +373,6 @@ jobs:
             fi
           done
           fi
-
-      - name: Apply patch_linux and replace Image
-        if: ${{ github.event.inputs.KPM == 'true' }}
-        run: |
-          cd /home/runner/work/Action_OnePlus_MKSU_SUSFS/Action_OnePlus_MKSU_SUSFS/kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.BUILD_METHOD }}/dist
-          curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU_patch/refs/heads/main/kpm/patch_linux" -o patch_linux
-          chmod +x patch_linux
-          ./patch_linux
-          rm -f Image
-          mv oImage Image
-          cp Image $GITHUB_WORKSPACE/AnyKernel3/Image
 
       # 下载 SUSFS 模块（CI）
       - name: Download Latest SUSFS Module from CI
