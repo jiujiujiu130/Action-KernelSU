@@ -95,7 +95,7 @@ on:
         default: true
       suffix:
         type: boolean
-        description: "是否添加后缀？"
+        description: "内核名称是否添加后缀？"
         required: true
         default: true
       ZRAM:
