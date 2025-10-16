@@ -86,7 +86,7 @@ on:
       SUSFS_VERSION:
         description: "susfs版本"
         required: true
-        default: 'main'
+        default: main
       SUSFS_CI:
         type: boolean
         description: "下载SUSFS模块是否使用CI构建？"
