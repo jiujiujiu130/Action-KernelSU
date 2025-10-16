@@ -93,16 +93,15 @@ on:
         description: "是否启用手动钩子？"
         required: true
         default: true
-      suffix:
+      SUFFIX:
         type: boolean
         description: "内核名称是否添加后缀？"
         required: true
         default: true
-      ZRAM:
-        type: boolean
-        description: "是否启用添加更多的ZRAM算法？"
+      SUSFS_VERSION:
+        description: "susfs版本"
         required: true
-        default: false
+        default: 'main'
 
 jobs:
   build:
@@ -171,7 +170,7 @@ jobs:
           sed -i 's/ -dirty//g' msm-kernel/scripts/setlocalversion
           sed -i 's/ -dirty//g' external/dtc/scripts/setlocalversion
           sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' common/scripts/setlocalversion
-          if [ "${{ github.event.inputs.suffix }}" = "false" ]; then
+          if [ "${{ github.event.inputs.SUFFIX }}" = "false" ]; then
             sed -i '$s|echo "\$res"|echo "\$res-xqm"|' common/scripts/setlocalversion
           fi
           git add -A
@@ -181,7 +180,7 @@ jobs:
       - name: Add KernelSU-SukiSU Ultra
         run: |
           cd kernel_workspace/kernel_platform
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-${{ github.event.inputs.SUSFS_VERSION }}
           #cd ./KernelSU
           #KSU_VERSION=$(expr $(/usr/bin/git rev-list --count main) "+" 10606)
           #echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
